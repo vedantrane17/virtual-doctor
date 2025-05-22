@@ -36,34 +36,49 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         'brandUrl' => Yii::$app->homeUrl,
         'options' => ['class' => 'navbar-expand-md navbar-dark bg-dark fixed-top']
     ]);
+    $menuItems = [
+        ['label' => 'Home', 'url' => ['/site/index']],
+        ['label' => 'About', 'url' => ['/site/about']],
+        ['label' => 'Contact', 'url' => ['/site/contact']],
+    ];
+
+    if (Yii::$app->user->isGuest) {
+        $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
+        $menuItems[] = ['label' => 'Register', 'url' => ['/site/register']];
+    } else {
+        $role = Yii::$app->user->identity->role;
+
+        if ($role === 'admin') {
+            $menuItems[] = ['label' => 'Users', 'url' => ['/user/index']];
+            $menuItems[] = ['label' => 'Doctors', 'url' => ['/doctor/index']];
+            $menuItems[] = ['label' => 'Appointments', 'url' => ['/appointment/index']];
+        }
+
+        if ($role === 'doctor') {
+            $menuItems[] = ['label' => 'My Appointments', 'url' => ['/appointment/index']];
+        }
+
+        if ($role === 'user') {
+            $menuItems[] = ['label' => 'Doctors', 'url' => ['/doctor/index']];
+            $menuItems[] = ['label' => 'Book Appointment', 'url' => ['/appointment/create']];
+            $menuItems[] = ['label' => 'My Appointments', 'url' => ['/appointment/index']];
+        }
+
+        $menuItems[] = '<li class="nav-item">'
+            . Html::beginForm(['/site/logout'], 'post', ['class' => 'd-inline'])
+            . Html::submitButton(
+                'Logout (' . Yii::$app->user->identity->username . ')',
+                ['class' => 'nav-link btn btn-link logout']
+            )
+            . Html::endForm()
+            . '</li>';
+    }
+
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav'],
-        'items' => array_filter([
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
-
-            Yii::$app->user->isGuest ? ['label' => 'Login', 'url' => ['/site/login']] : false,
-            Yii::$app->user->isGuest ? ['label' => 'Register', 'url' => ['/site/register']] : false,
-
-            !Yii::$app->user->isGuest && Yii::$app->user->identity->role === 'admin' 
-                ? ['label' => 'Admin Panel', 'url' => ['/user/index']] : false,
-
-            !Yii::$app->user->isGuest && Yii::$app->user->identity->role === 'doctor' 
-                ? ['label' => 'Doctor Panel', 'url' => ['/doctor/index']] : false,
-
-            !Yii::$app->user->isGuest ? (
-                '<li class="nav-item">'
-                . Html::beginForm(['/site/logout'], 'post', ['class' => 'd-inline'])
-                . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . ')',
-                    ['class' => 'nav-link btn btn-link logout']
-                )
-                . Html::endForm()
-                . '</li>'
-            ) : false,
-        ]),
+        'items' => $menuItems,
     ]);
+
 
     NavBar::end();
     ?>

@@ -20,7 +20,7 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             [['auth_key'], 'default', 'value' => null],
-            [['role'], 'default', 'value' => 'user'],
+            // [['role'], 'default', 'value' => 'user'],
             [['username', 'email', 'password_hash'], 'required'],
             [['created_at'], 'safe'],
             [['username', 'email', 'password_hash', 'role'], 'string', 'max' => 255],
@@ -38,7 +38,7 @@ class User extends ActiveRecord implements IdentityInterface
             'email' => 'Email',
             'password_hash' => 'Password Hash',
             'auth_key' => 'Auth Key',
-            'role' => 'Role',
+            'role' => 'Register As',
             'created_at' => 'Created At',
         ];
     }

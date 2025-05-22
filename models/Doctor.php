@@ -14,7 +14,7 @@ use yii\helpers\ArrayHelper;
  * @property int|null $experience
  * @property array $clinic_ids (virtual property)
  *
- * @property Clinics[] $clinics
+ * @property Clinic[] $clinics
  */
 class Doctor extends \yii\db\ActiveRecord
 {
@@ -61,7 +61,7 @@ class Doctor extends \yii\db\ActiveRecord
      */
     public function getClinics()
     {
-        return $this->hasMany(Clinics::class, ['id' => 'clinic_id'])
+        return $this->hasMany(Clinic::class, ['id' => 'clinic_id'])
             ->viaTable('doctor_clinic', ['doctor_id' => 'id']);
     }
 

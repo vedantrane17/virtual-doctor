@@ -142,7 +142,6 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $model->password_hash = Yii::$app->security->generatePasswordHash($model->password_hash);
             $model->auth_key = Yii::$app->security->generateRandomString();
-            $model->role = 'user';
 
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', 'Registration successful. Please login.');
