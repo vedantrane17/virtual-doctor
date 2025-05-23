@@ -54,6 +54,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 
         if ($role === 'doctor') {
             $menuItems[] = ['label' => 'My Appointments', 'url' => ['/appointment/index']];
+            $menuItems[] = ['label' => 'Todays Appointments', 'url' => ['/appointment/today']];
             $menuItems[] = ['label' => 'Manage Holidays', 'url' => ['/holidays/index']];
         }
 

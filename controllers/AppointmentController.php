@@ -211,4 +211,31 @@ class AppointmentController extends Controller
         return $this->redirect(['index']);
     }
 
+    public function actionToday()
+    {
+        if (Yii::$app->user->identity->role !== 'doctor') {
+            throw new \yii\web\ForbiddenHttpException('Access denied.');
+        }
+
+        $doctor = \app\models\Doctor::findOne(['user_id' => Yii::$app->user->id]);
+
+        if (!$doctor) {
+            throw new \yii\web\NotFoundHttpException('Doctor profile not found.');
+        }
+
+        $today = date('Y-m-d');
+
+        $dataProvider = new \yii\data\ActiveDataProvider([
+            'query' => \app\models\Appointment::find()
+                ->where(['doctor_id' => $doctor->id])
+                ->andWhere(['DATE(start_time)' => $today])
+                ->orderBy(['start_time' => SORT_ASC]),
+        ]);
+
+        return $this->render('today', [
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+
 }
