@@ -12,14 +12,10 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'doctor_id')->textInput() ?>
+    <?= $form->field($model, 'date')->input('date') ?>
 
-    <?= $form->field($model, 'date')->textInput() ?>
-
-    <?= $form->field($model, 'reason')->textInput(['maxlength' => true]) ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+    <div class="form-group mt-3">
+        <?= Html::submitButton('Mark as Holiday', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

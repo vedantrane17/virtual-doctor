@@ -17,7 +17,8 @@ class DoctorSearch extends Doctor
     public function rules()
     {
         return [
-            [['id'], 'integer'],
+            [['id', 'experience'], 'integer'],
+            [['name', 'specialization'], 'safe'],
         ];
     }
 
@@ -42,8 +43,6 @@ class DoctorSearch extends Doctor
     {
         $query = Doctor::find();
 
-        // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -56,7 +55,6 @@ class DoctorSearch extends Doctor
             return $dataProvider;
         }
 
-        // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
         ]);

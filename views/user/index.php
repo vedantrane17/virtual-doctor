@@ -32,17 +32,23 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'username',
             'email:email',
-            'password_hash',
-            'auth_key',
-            //'role',
-            //'created_at',
+
+            [
+                'attribute' => 'role',
+                'label' => 'Role',
+                'value' => function ($model) {
+                    return ucfirst($model->role);
+                },
+            ],
+
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, User $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+                }
             ],
         ],
+
     ]); ?>
 
 

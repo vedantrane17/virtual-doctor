@@ -27,23 +27,59 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+    ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'user_id',
-            'doctor_id',
-            'clinic_id',
-            'start_time',
-            //'end_time',
-            //'status',
-            //'price',
-            [
-                'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Appointment $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                 }
-            ],
-        ],
+    [
+        'label' => 'Booked By',
+        'value' => function ($model) {
+            return $model->user->username ?? '(unknown)';
+        }
+    ],
+
+    [
+        'label' => 'Doctor',
+        'value' => function ($model) {
+            return $model->doctor->name ?? '(not assigned)';
+        }
+    ],
+
+    [
+        'label' => 'Date',
+        'value' => function ($model) {
+            return Yii::$app->formatter->asDate($model->start_time, 'php:Y-m-d');
+        }
+    ],
+
+    [
+        'label' => 'Start Time',
+        'value' => function ($model) {
+            return Yii::$app->formatter->asTime($model->start_time, 'php:h:i A');
+        }
+    ],
+
+    [
+        'attribute' => 'status',
+        'value' => function ($model) {
+            return ucfirst($model->status);
+        }
+    ],
+
+    [
+        'attribute' => 'price',
+        'value' => function ($model) {
+            return '₹' . number_format($model->price, 2);
+        }
+    ],
+
+    [
+        'class' => \yii\grid\ActionColumn::className(),
+        'urlCreator' => function ($action, \app\models\Appointment $model, $key, $index, $column) {
+            return Url::toRoute([$action, 'id' => $model->id]);
+        }
+    ],
+],
+
+
     ]); ?>
 
 

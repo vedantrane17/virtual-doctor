@@ -2,11 +2,14 @@
 
 namespace app\controllers;
 
+use Yii;
 use app\models\Holidays;
 use app\models\HolidaysSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\data\ActiveDataProvider;
+
 
 /**
  * HolidaysController implements the CRUD actions for Holidays model.
@@ -38,14 +41,23 @@ class HolidaysController extends Controller
      */
     public function actionIndex()
     {
+        $doctor = \app\models\Doctor::findOne(['user_id' => Yii::$app->user->id]);
+
+        if (!$doctor) {
+            throw new \yii\web\ForbiddenHttpException('You are not authorized.');
+        }
+
         $searchModel = new HolidaysSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider = new ActiveDataProvider([
+            'query' => Holidays::find()->where(['doctor_id' => $doctor->id]),
+        ]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
+
 
     /**
      * Displays a single Holidays model.
@@ -69,18 +81,30 @@ class HolidaysController extends Controller
     {
         $model = new Holidays();
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+        $doctor = \app\models\Doctor::findOne(['user_id' => Yii::$app->user->id]);
+
+        if (!$doctor) {
+            throw new \yii\web\ForbiddenHttpException('You are not allowed to add holidays.');
+        }
+
+        if ($model->load(Yii::$app->request->post())) {
+            $model->doctor_id = $doctor->id;
+
+            if (Holidays::find()->where(['doctor_id' => $doctor->id, 'date' => $model->date])->exists()) {
+                Yii::$app->session->setFlash('error', 'This date is already marked as a holiday.');
+            } else {
+                $model->save(false);
+                Yii::$app->session->setFlash('success', 'Holiday added successfully.');
+                return $this->redirect(['index']);
             }
-        } else {
-            $model->loadDefaultValues();
         }
 
         return $this->render('create', [
             'model' => $model,
         ]);
     }
+
+
 
     /**
      * Updates an existing Holidays model.

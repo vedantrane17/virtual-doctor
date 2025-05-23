@@ -30,8 +30,20 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
+            'name',
+            'specialization',
+            [
+                'attribute' => 'experience',
+                'label' => 'Experience (Years)',
+            ],
+            [
+                'attribute' => 'user_id',
+                'value' => $model->user->username ?? '(not assigned)',
+                'label' => 'Username',
+            ],
         ],
     ]) ?>
+
 
     <h4>Clinics:</h4>
     <ul>

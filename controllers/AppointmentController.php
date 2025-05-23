@@ -54,31 +54,29 @@ class AppointmentController extends Controller
     public function actionIndex()
     {
         $searchModel = new AppointmentSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         $user = Yii::$app->user->identity;
 
-        // If the user is a doctor, filter by doctor_id
-        if ($user->role === 'doctor') {
-            $doctor = \app\models\Doctor::findOne(['user_id' => $user->id]);
-            if ($doctor) {
-                $searchModel->doctor_id = $doctor->id;
-            } else {
-                throw new \yii\web\ForbiddenHttpException('Doctor profile not found.');
-            }
-        }
-
-        // Optional: filter user's own appointments too
+        // If the logged-in user is NOT an admin
         if ($user->role === 'user') {
             $searchModel->user_id = $user->id;
         }
 
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        // If doctor — show own appointments (optional)
+        if ($user->role === 'doctor') {
+            $doctor = \app\models\Doctor::findOne(['user_id' => $user->id]);
+            if ($doctor) {
+                $searchModel->doctor_id = $doctor->id;
+            }
+        }
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
+
 
 
 
@@ -104,26 +102,35 @@ class AppointmentController extends Controller
     {
         $model = new Appointment();
 
-        // Pre-fill user_id if needed
         $model->user_id = Yii::$app->user->id;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $appointmentDate = date('Y-m-d', strtotime($model->start_time));
+            $isHoliday = \app\models\Holidays::find()
+                ->where(['doctor_id' => $model->doctor_id])
+                ->andWhere(['date' => $appointmentDate])
+                ->exists();
 
-            // Generate email confirmation file
-            $html = $this->renderPartial('_email_template', ['model' => $model]);
-
-            // Ensure the directory exists
-            $emailDir = Yii::getAlias('@runtime/emails');
-            if (!is_dir($emailDir)) {
-                mkdir($emailDir, 0777, true);
+            if ($isHoliday) {
+                Yii::$app->session->setFlash('error', 'Selected date is a holiday for this doctor.');
+                return $this->render('create', ['model' => $model]);
             }
 
-            file_put_contents("$emailDir/appointment_{$model->id}.html", $html);
+            if ($model->save()) {
+                $html = $this->renderPartial('_email_template', ['model' => $model]);
 
-            Yii::$app->session->setFlash('success', 'Appointment booked and confirmation generated.');
+                $emailDir = Yii::getAlias('@runtime/emails');
+                if (!is_dir($emailDir)) {
+                    mkdir($emailDir, 0777, true);
+                }
 
-            return $this->redirect(['view', 'id' => $model->id]);
+                file_put_contents("$emailDir/appointment_{$model->id}.html", $html);
+
+                Yii::$app->session->setFlash('success', 'Appointment booked and confirmation generated.');
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
+
 
         return $this->render('create', [
             'model' => $model,

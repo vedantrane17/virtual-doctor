@@ -30,14 +30,50 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'user_id',
-            'doctor_id',
-            'clinic_id',
-            'start_time',
-            'end_time',
-            'status',
-            'price',
+
+            [
+                'label' => 'Booked By',
+                'value' => $model->user->username ?? '(Not available)',
+            ],
+
+            [
+                'label' => 'Doctor',
+                'value' => $model->doctor->name ?? '(Not assigned)',
+            ],
+            [
+                'label' => 'Specialization',
+                'value' => $model->doctor->specialization ?? '(N/A)',
+            ],
+
+            [
+                'label' => 'Clinic',
+                'value' => $model->clinic->name ?? '(N/A)',
+            ],
+
+            [
+                'label' => 'Date',
+                'value' => Yii::$app->formatter->asDate($model->start_time, 'php:Y-m-d'),
+            ],
+            [
+                'label' => 'Start Time',
+                'value' => Yii::$app->formatter->asTime($model->start_time, 'php:h:i A'),
+            ],
+            [
+                'label' => 'End Time',
+                'value' => Yii::$app->formatter->asTime($model->end_time, 'php:h:i A'),
+            ],
+
+            [
+                'attribute' => 'status',
+                'value' => ucfirst($model->status),
+            ],
+
+            [
+                'attribute' => 'price',
+                'value' => '₹' . number_format($model->price, 2),
+            ],
         ],
     ]) ?>
+
 
 </div>

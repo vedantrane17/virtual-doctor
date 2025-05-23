@@ -41,7 +41,8 @@ class UserSearch extends User
      */
     public function search($params, $formName = null)
     {
-        $query = User::find();
+        $query = User::find()
+        ->where(['role' => ['user', 'doctor']]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

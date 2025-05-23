@@ -38,8 +38,6 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     ]);
     $menuItems = [
         ['label' => 'Home', 'url' => ['/site/index']],
-        ['label' => 'About', 'url' => ['/site/about']],
-        ['label' => 'Contact', 'url' => ['/site/contact']],
     ];
 
     if (Yii::$app->user->isGuest) {
@@ -56,6 +54,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 
         if ($role === 'doctor') {
             $menuItems[] = ['label' => 'My Appointments', 'url' => ['/appointment/index']];
+            $menuItems[] = ['label' => 'Manage Holidays', 'url' => ['/holidays/index']];
         }
 
         if ($role === 'user') {

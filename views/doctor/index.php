@@ -17,9 +17,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Create Doctor', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
@@ -30,13 +27,21 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
+            'name',
+            'specialization',
+            [
+                'attribute' => 'experience',
+                'label' => 'Experience (Years)',
+            ],
+
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Doctor $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+                }
             ],
         ],
+
     ]); ?>
 
 

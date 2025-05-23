@@ -1,53 +1,44 @@
 <?php
-
 /** @var yii\web\View $this */
-
-$this->title = 'My Yii Application';
+$this->title = 'Virtual Doctor Appointment System';
 ?>
+
 <div class="site-index">
 
-    <div class="jumbotron text-center bg-transparent mt-5 mb-5">
-        <h1 class="display-4">Congratulations!</h1>
-
-        <p class="lead">You have successfully created your Yii-powered application.</p>
-
-        <p><a class="btn btn-lg btn-success" href="https://www.yiiframework.com">Get started with Yii</a></p>
+    <div class="bg-primary text-white text-center py-5 shadow rounded mb-5">
+        <h1 class="display-4 fw-bold">Virtual Doctor Appointment System</h1>
+        <p class="lead mt-3">Book appointments, manage schedules, and simplify patient care.</p>
+        <a href="<?= \yii\helpers\Url::to(['site/login']) ?>" class="btn btn-light btn-lg mt-3">Get Started</a>
     </div>
 
-    <div class="body-content">
-
-        <div class="row">
-            <div class="col-lg-4 mb-3">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-outline-secondary" href="https://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
+    <div class="container text-center">
+        <div class="row mb-4">
+            <div class="col-md-4 mb-3">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">👤 Users</h5>
+                        <p class="card-text">Browse doctors, view schedules, and book appointments easily from anywhere.</p>
+                    </div>
+                </div>
             </div>
-            <div class="col-lg-4 mb-3">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-outline-secondary" href="https://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
+            <div class="col-md-4 mb-3">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">🧑‍⚕️ Doctors</h5>
+                        <p class="card-text">Manage your appointments, accept or reject requests, and update your availability.</p>
+                    </div>
+                </div>
             </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-outline-secondary" href="https://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
+            <div class="col-md-4 mb-3">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">🛠️ Admin</h5>
+                        <p class="card-text">Monitor users, doctors, and appointments. Full access to system management.</p>
+                    </div>
+                </div>
             </div>
         </div>
 
+        <p class="text-muted mt-5">Built with <strong>Yii2 Framework</strong>, using RBAC for secure access control.</p>
     </div>
 </div>
