@@ -54,9 +54,6 @@ runtime/emails/ # Generated appointment confirmation HTML files
 
 ---
 
-## 📧 Contact
-
-If you have questions or suggestions, feel free to contact [Your Name] or open an issue.
 
 
 
